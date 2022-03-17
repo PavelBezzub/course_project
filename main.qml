@@ -4,9 +4,10 @@ import QtQuick.Controls 2.2
 import QtQuick.Window 2.0
 import QtQuick.Dialogs 1.0
 
+
 ApplicationWindow {
     id: window
-    width: 1280
+    width: 900
     height: 720
     visible: true
     title: "Qt Quick Controls 2 - Imagine Style Example: Music Player"
@@ -15,6 +16,26 @@ ApplicationWindow {
         x = Screen.width / 2 - width / 2
         y = Screen.height / 2 - height / 2
     }
+
+
+    // ColumnLayout {
+    //     id: columnLayout_1
+
+    //     width: window.width
+    //     height: window.height
+    //     Item {
+    //         Layout.fillWidth: true
+    //         Layout.fillHeight: true
+
+    //         Image {
+    //             id: image_
+    //             anchors.fill: parent
+    //             // fillMode: Image.PreserveAspectCrop
+    //             source: "background.jpg"
+    //             // source: 'file:///C:/projects/The_Witcher_3_Wild_Hunt_Cover.jpg'
+    //         }
+    //     }
+    // }
 
     Shortcut {
         sequence: "Ctrl+Q"
@@ -63,12 +84,12 @@ ApplicationWindow {
 //        }
 //    }
 
-    Label {
-        text: "Qtify"
-        font.pixelSize: Qt.application.font.pixelSize * 1.3
-        anchors.centerIn: header
-        z: header.z + 1
-    }
+    // Label {
+    //     text: "Qtify"
+    //     font.pixelSize: Qt.application.font.pixelSize * 1.3
+    //     anchors.centerIn: header
+    //     z: header.z + 1
+    // }
 
     RowLayout {
         spacing: 115
@@ -78,23 +99,6 @@ ApplicationWindow {
         anchors.topMargin: 42
         anchors.bottomMargin: 38
         anchors.leftMargin: 35
-
-        ColumnLayout {
-            spacing: 0
-            Layout.preferredWidth: 230
-
-            Dial {
-                Layout.alignment: Qt.AlignHCenter
-                Layout.topMargin: 50
-            }
-
-            Label {
-                text: "Volume"
-
-                Layout.alignment: Qt.AlignHCenter
-                Layout.topMargin: 12
-            }
-        }
 
         ColumnLayout {
             spacing: 26
@@ -308,7 +312,7 @@ ApplicationWindow {
                     onClicked: music.get_all_playlists()
                 }
                 Button {
-                    text: "Favourites"
+                    text: "now playing"
                     checkable: true
                 }
             }
@@ -321,7 +325,10 @@ ApplicationWindow {
 //                    icon.name: "folder"
                     text: qsTr("folder")
                     onClicked: {
-                        fileDialog.open()                   
+                        // fileDialog.open() 
+                        // dialog1.open()
+                        // music.start_file_dialog()  
+                        // test {text: qsTr('Albums')}            
                     }
                 }
             }
@@ -337,17 +344,7 @@ ApplicationWindow {
 
                 ListModel {
                     id: music_model
-                    Component.onCompleted: {
-                        for (var i = 0; i < 100; ++i) {
-                            append({
-                                author: "Author",
-                                album: "Album",
-                                track: "Track 0" + (i % 9 + 1),
-                                id: i,
-                                favorite_: !(i % 3)
-                            });
-                        }
-                    }
+
                 }
                 ListModel {
                     id: playlist_model
@@ -363,7 +360,20 @@ ApplicationWindow {
                         }
                     }
                 }
-
+                ListModel {
+                    id: now_playing
+                    Component.onCompleted: {
+                        for (var i = 0; i < 9; ++i) {
+                            append({
+                                author: "Playlist",
+                                album: " ",
+                                track: "num = " + (i % 9 + 1),
+                                id: i,
+                                favorite_: !(i % 3)
+                            });
+                        }
+                    }
+                }
 
 
 
@@ -373,7 +383,7 @@ ApplicationWindow {
                     anchors.fill: parent
                     model: music_model
                     delegate: ItemDelegate {
-                        text: model.author + " - " + model.album + " - " + model.track
+                        text: model.author + " - " + model.publish_year + " - " + model.track
                         width: parent.width
                         Button {
                             id: button
@@ -484,7 +494,7 @@ ApplicationWindow {
     Connections {
         target: music
 
-        // Обработчик сигнала сложения
+        // Обработчик сигнала 
         onSeekSlider: {
             // longer_ было задано через arguments=['longer_']
             seekSlider.to  = longer_
@@ -494,8 +504,14 @@ ApplicationWindow {
             seekSlider.value  = longer_2
         }
         onUpdListView_music: {
-            
+            // music_model = music_model.append({author: 'author_',album: 'album_', track: 'track_'})
             listView.model = music_model
+            // playlist_model = playlist_model.clear()
+        }
+        onAddListView_music:{
+            music_model = music_model.append({id: id_, author: author_,publish_year: publish_year_, track: track_, favorite_: liked_})
+            // listView.model = music_model
+            console.log("onAddListView_music",author_,publish_year_,track_) 
         }
         onUpdListView_playlist: {
             // playlist_model = playlist_model.append({author: "Playlist", album: " ", track: "num = " + (1 % 9 + 1), id: 16, favorite_: !(1 % 3)})
@@ -504,6 +520,57 @@ ApplicationWindow {
 
         }
     }
+
+    Dialog {
+        id: dialog1
+            // RowLayout {
+                // layoutDirection: RightToLeft 
+                // anchors.horizontalCenter: parent.horizontalCenter
+                Button {
+                    id: button_save
+                    // anchors.right: button_cancel.left
+                    text: qsTr("Save")
+                    onClicked: {
+                        // fileDialog_music.open()
+                        console.log("Save")                   
+                    }
+                }
+                Button {
+                    id: button_cancel
+                    // anchors.right: parent.right
+                    text: qsTr("Cancel")
+                    onClicked: {
+                        // fileDialog_music.open()
+                        console.log("Canceled") 
+                        music_add.get_all_playlists()                  
+                    }
+                }
+                // }
+                Connections {
+                    target: music_add
+                }
+
+    }
+
+    Slider {
+        id: volume
+        x: 433
+        y: 407
+        width: 40
+        height: 252
+        focusPolicy: Qt.TabFocus
+        font.pointSize: 8
+        live: false
+        stepSize: 1
+        to: 100
+        orientation: Qt.Vertical
+        value: 50
+    }
+    
+
+
+
+
 //    Button {
 //        id: button
 //        x: 188
