@@ -51,14 +51,14 @@ d = {'id_playlist': [1, 1, 1, 1, 1, 2, 2, 2], 'id_music': [1, 2, 3, 4, 5, 3 , 6,
 playlists = pd.DataFrame(data=d)
 # d2 = {'id_music': [1, 2, 3, 4, 5, 6, 7], 'len_music': [5,6,4,8,10,7,6], 'name' : ['a','b','c','d','e','f','g']}
 # music = pd.DataFrame(data=d2)
-music = pd.read_csv('test_1/music.csv')
+music = pd.read_csv('music.csv')
 
 class Music(QObject):
     def __init__(self):
         QObject.__init__(self)
         self.playlists = playlists
         self.music = music
-        self.test_()
+        # self.test_()
         
 
 
@@ -171,9 +171,9 @@ if  __name__ == "__main__":
     engine.rootContext().setContextProperty("music_add", music_add)
     engine.rootContext().setContextProperty("music", music)
     # загружаем файл qml в движок
-    engine.load("test_1/main.qml")
+    engine.load("main.qml")
     music.test_()
-    music.addListView_music.emit()
+    # music.addListView_music.emit()
     engine.quit.connect(app.quit)
     sys.exit(app.exec_())
 

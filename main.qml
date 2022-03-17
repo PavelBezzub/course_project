@@ -3,6 +3,7 @@ import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.2
 import QtQuick.Window 2.0
 import QtQuick.Dialogs 1.0
+import QtGraphicalEffects 1.0
 
 
 ApplicationWindow {
@@ -17,25 +18,40 @@ ApplicationWindow {
         y = Screen.height / 2 - height / 2
     }
 
+    
+    LinearGradient {
+        anchors.fill: parent
+        start: Qt.point(0, 0)
+        end: Qt.point(parent.width/2, parent.height/2)
+        gradient: Gradient {
+            GradientStop {
+                position: 0.0
+                SequentialAnimation on color {
+                    loops: Animation.Infinite
+                    ColorAnimation { from: "#ee7752"; to: "#e73c7e"; duration: 2500 }
+                    ColorAnimation { from: "#e73c7e"; to: "#23a6d5"; duration: 2500 }
+                    ColorAnimation { from: "#23a6d5"; to: "#23d5ab"; duration: 2500 }
 
-    // ColumnLayout {
-    //     id: columnLayout_1
+                    ColorAnimation { from: "#23d5ab"; to: "#23a6d5"; duration: 2500 }
+                    ColorAnimation { from: "#23a6d5"; to: "#e73c7e"; duration: 2500 }
+                    ColorAnimation { from: "#e73c7e"; to: "#ee7752"; duration: 2500 }
+                }
+            }   
+            GradientStop { 
+                position: 1.0
+                SequentialAnimation on color {
+                    loops: Animation.Infinite
+                    ColorAnimation { from: "#e73c7e"; to: "#23a6d5"; duration: 2500 }
+                    ColorAnimation { from: "#23a6d5"; to: "#23d5ab"; duration: 2500 }
+                    ColorAnimation { from: "#23d5ab"; to: "#23a6d5"; duration: 2500 }
 
-    //     width: window.width
-    //     height: window.height
-    //     Item {
-    //         Layout.fillWidth: true
-    //         Layout.fillHeight: true
-
-    //         Image {
-    //             id: image_
-    //             anchors.fill: parent
-    //             // fillMode: Image.PreserveAspectCrop
-    //             source: "background.jpg"
-    //             // source: 'file:///C:/projects/The_Witcher_3_Wild_Hunt_Cover.jpg'
-    //         }
-    //     }
-    // }
+                    ColorAnimation { from: "#23a6d5"; to: "#e73c7e"; duration: 2500 }
+                    ColorAnimation { from: "#e73c7e"; to: "#ee7752"; duration: 2500 }
+                    ColorAnimation { from: "#ee7752"; to: "#e73c7e"; duration: 2500 }
+                }
+            }
+        }
+    }
 
     Shortcut {
         sequence: "Ctrl+Q"
@@ -337,10 +353,14 @@ ApplicationWindow {
                 id: filesFrame
                 leftPadding: 1
                 rightPadding: 1
-
                 Layout.fillWidth: true
                 Layout.fillHeight: true
-
+                
+                // background: Rectangle {
+                //     width: filesFrame.width
+                //     height: filesFrame.height
+                //     color: "#595757"
+                // }
 
                 ListModel {
                     id: music_model
@@ -382,6 +402,7 @@ ApplicationWindow {
                     clip: true
                     anchors.fill: parent
                     model: music_model
+                    
                     delegate: ItemDelegate {
                         text: model.author + " - " + model.publish_year + " - " + model.track
                         width: parent.width
