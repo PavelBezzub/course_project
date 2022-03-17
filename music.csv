@@ -1,0 +1,16 @@
+,id,song_title,artist,publish_year,album,genre,duration,liked,listened,path_in_pc,path_img
+0,0,Bad Guy,Billie Eilish,2019,"When We All Fall Asleep, Where Do We Go?",Indie,194.136,False,0,music/Billie Eilish - Bad Guy.mp3,images/Billie Eilish - Bad Gay.jpg
+1,1,Enjoy The Silence (Pitchugin Radio Remix),Depeche Mode,1990,Violator,Alternative rock,437.0415743068128,False,0,music/Depeche Mode - Enjoy The Silence (Pitchugin Radio Remix).mp3,images/Depeche Mode - Enjoy The Silence.jpg
+2,2,Afterglow,Ed Sheeran,2020,Afterglow,Folk-pop,185.59744927264416,False,0,music/Ed Sheeran - Afterglow.mp3,images/Ed Sheeran - Afterglow.jpg
+3,3,The A Team,Ed Sheeran,2011,+,Folk,272.63623464699816,False,0,music/Ed Sheeran - The A Team.mp3,images/Ed Sheeran - The A Team.jpg
+4,4,Don't Think About Elephants,Hans Zimmer,2010,Inception: Music from the Motion Picture,Film score,335.6897427985548,False,0,music/Hans Zimmer - Don't Think About Elephants.mp3,images/Hans Zimmer - Don't Think About Elephants.jpeg
+5,5,Instinct,Hans Zimmer,1991,Green Card,Film score,213.2690346997401,False,0,music/Hans Zimmer - Instinct.mp3,images/Hans Zimmer - Instinct.jpg
+6,6,The Numbers,Hans Zimmer,2008,Frost/Nixon,Film score,116.98192122045114,False,0,music/Hans Zimmer - The Numbers.mp3,images/Hans Zimmer - The Numbers.jpg
+7,7,Believer,Imagine Dragons,2016,Evolve,Pop rock,204.4048,False,0,music/Imagine Dragons - Believer.mp3,images/Imagine Dragons - Believer.jpg
+8,8,Follow You,Imagine Dragons,2021,Mercury — Act 1,Pop rock,175.68672063005906,False,0,music/Imagine Dragons - Follow You.mp3,images/Imagine Dragons - Follow You.png
+9,9,I Was Me,Imagine Dragons,2015,,Acoustic rock,196.00053432282002,False,0,music/Imagine Dragons - I Was Me.mp3,images/Imagine Dragons - I Was Me.png
+10,10,Machine,Imagine Dragons,2018,Origins,Arena rock,181.99152101966578,False,0,music/Imagine Dragons - Machine.mp3,images/Imagine Dragons - Machine.jpg
+11,11,The Fall,Imagine Dragons,2015,Smoke + Mirrors,Pop rock,362.62753050674604,False,0,music/Imagine Dragons - The Fall .mp3,images/Imagine Dragons - The Fall.jpg
+12,12,Yesterday,Imagine Dragons,2017,Evolve,Pop rock,205.2471275012015,False,0,music/Imagine Dragons - Yesterday.mp3,images/Imagine Dragons - Yesterday.jpg
+13,13,Lithium (1992/Live at Reading) (mp3store.live),Nirvana,1992,Nevermind,Alternative rock,261.9751538524658,False,0,music/Nirvana - Lithium.mp3,images/Nirvana - Lithium.jpg
+14,14,Rondo a La Turca,Wolfgang Amadeus Mozart,1784,Piano Sonata No. 11,,203.13044429254956,False,0,music/Wolfgang Amadeus Mozart - Rondo a La Turca.mp3,images/Wolfgang Amadeus Mozart - Rondo a La Turca.jpg
