@@ -4,17 +4,18 @@ import QtQuick.Controls 2.2
 import QtQuick.Window 2.0
 import QtQuick.Dialogs 1.0
 
-ApplicationWindow {
+// ApplicationWindow {
+Rectangle{
     id: window
     width: 1080
     height: 720
     visible: true
-    title: "Qt Quick Controls 2 - Imagine Style Example: Music Player"
+    // title: "Qt Quick Controls 2 - Imagine Style Example: Music Player"
 
-    Component.onCompleted: {
-        x = Screen.width / 2 - width / 2
-        y = Screen.height / 2 - height / 2
-    }
+    // Component.onCompleted: {
+    //     x = Screen.width / 2 - width / 2
+    //     y = Screen.height / 2 - height / 2
+    // }
     
     // Rectangle {
     //     id :rect_drop
@@ -288,7 +289,11 @@ ApplicationWindow {
                     text: qsTr("Save")
                     onClicked: {
                         // fileDialog_music.open()
-                        console.log("Save")                   
+                        console.log("Save")
+                        music_add.save()
+                        music.upd_music_list()
+                        music_add.clear()
+                        music.close_music_dialog()                   
                     }
                 }
                 Button {
@@ -297,7 +302,9 @@ ApplicationWindow {
                     text: qsTr("Cancel")
                     onClicked: {
                         // fileDialog_music.open()
-                        console.log("Canceled")                   
+                        console.log("Canceled")
+                        // music_add.clear()
+                        music.close_music_dialogs()                
                     }
                 }
             }

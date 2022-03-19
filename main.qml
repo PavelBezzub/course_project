@@ -2,13 +2,13 @@ import QtQuick 2.9
 import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.2
 import QtQuick.Window 2.0
-import QtQuick.Dialogs 1.0
+import QtQuick.Dialogs 1.2
 import QtGraphicalEffects 1.0
 
 
 ApplicationWindow {
     id: window
-    width: 900
+    width: 1000
     height: 720
     visible: true
     title: "Qt Quick Controls 2 - Imagine Style Example: Music Player"
@@ -117,6 +117,7 @@ ApplicationWindow {
         anchors.leftMargin: 35
 
         ColumnLayout {
+            width: 362
             spacing: 26
             Layout.preferredWidth: 230
 
@@ -244,15 +245,17 @@ ApplicationWindow {
                 RoundButton {
                     text: "favorite"
                     radius: 200
-                    onClicked: music.play()
+                    onClicked: music.favorite()
                 }
                 RoundButton {
                     text: "stop"
                     radius: 200
+                    onClicked: music.stop()
                 }
                 RoundButton {
                     text: "previous"
                     radius: 200
+                    onClicked: music.previous()
                 }
                 RoundButton {
                     text: "pause"
@@ -262,17 +265,17 @@ ApplicationWindow {
                 RoundButton {
                     text: "next"
                     radius: 200
-                    onClicked: {
-                        music.next()
-                     }
+                    onClicked: music.next() 
                 }
                 RoundButton {
                     text: "repeat"
                     radius: 200
+                    onClicked: music.repeat() 
                 }
                 RoundButton {
                     text:"shuffle"
                     radius: 200
+                    onClicked: music.shuffle() 
                 }
             }
 
@@ -298,11 +301,26 @@ ApplicationWindow {
                     }
                 }
             }
-
-//            RoundButton {
-//                id: roundButton
-//                text: "+"
-//            }
+        }
+        ColumnLayout {
+            spacing: 5
+            Layout.preferredWidth: 50
+            Layout.preferredHeight: 640
+            Slider {
+                id: volume
+                // x: 430
+                // y: 430
+                width: 40
+                height: 252
+                Layout.alignment: Qt.AlignLeft | Qt.AlignBottom
+                focusPolicy: Qt.TabFocus
+                font.pointSize: 8
+                live: false
+                stepSize: 1
+                to: 100
+                orientation: Qt.Vertical
+                value: 50
+            }
         }
 
         ColumnLayout {
@@ -330,20 +348,29 @@ ApplicationWindow {
                 Button {
                     text: "now playing"
                     checkable: true
+                    onClicked: music.get_now_playlists()
                 }
             }
 
             RowLayout {
-                TextField {
-                    Layout.fillWidth: true
-                }
+                Layout.alignment: Qt.AlignHCenter
                 Button {
-//                    icon.name: "folder"
-                    text: qsTr("folder")
+                    text: qsTr("Add Music")
                     onClicked: {
                         // fileDialog.open() 
-                        // dialog1.open()
+                        dialog1.open()
                         // music.start_file_dialog()  
+                        // test {text: qsTr('Albums')}            
+                    }
+                }
+                Button {
+                    text: qsTr("Add PlayList")
+                    onClicked: {
+                        // fileDialog.open() 
+                        dialog2.open()
+
+                        // music.start_playlist_dialog() 
+                        playlist_change.set() 
                         // test {text: qsTr('Albums')}            
                     }
                 }
@@ -351,60 +378,36 @@ ApplicationWindow {
 
             Frame {
                 id: filesFrame
+                visible: true
                 leftPadding: 1
                 rightPadding: 1
                 Layout.fillWidth: true
                 Layout.fillHeight: true
                 
-                // background: Rectangle {
-                //     width: filesFrame.width
-                //     height: filesFrame.height
-                //     color: "#595757"
-                // }
+                background: Rectangle {
+                    width: filesFrame.width
+                    height: filesFrame.height
+                    color: "#595757"
+                    opacity: 0.1
+                }
 
                 ListModel {
                     id: music_model
-
                 }
+                
                 ListModel {
                     id: playlist_model
-                    Component.onCompleted: {
-                        for (var i = 0; i < 9; ++i) {
-                            append({
-                                author: "Playlist",
-                                album: " ",
-                                track: "num = " + (i % 9 + 1),
-                                id: i,
-                                favorite_: !(i % 3)
-                            });
-                        }
-                    }
                 }
+
                 ListModel {
-                    id: now_playing
-                    Component.onCompleted: {
-                        for (var i = 0; i < 9; ++i) {
-                            append({
-                                author: "Playlist",
-                                album: " ",
-                                track: "num = " + (i % 9 + 1),
-                                id: i,
-                                favorite_: !(i % 3)
-                            });
-                        }
-                    }
+                    id: now_playing_model
                 }
 
-
-
-                ListView {
-                    id: listView
-                    clip: true
-                    anchors.fill: parent
-                    model: music_model
-                    
-                    delegate: ItemDelegate {
-                        text: model.author + " - " + model.publish_year + " - " + model.track
+                Component {
+                    id: music_delegate
+                    ItemDelegate {
+                        
+                        text: model.track + " - " + model.author + " - " + model.publish_year 
                         width: parent.width
                         Button {
                             id: button
@@ -419,7 +422,7 @@ ApplicationWindow {
                                 implicitHeight: 32
                                 color: "#e8e1e1"
                             }
-
+                            
                             contentItem: Text {
                                 text: parent.text
                                 verticalAlignment: Text.AlignVCenter
@@ -456,20 +459,25 @@ ApplicationWindow {
                         }
                         Button {
                             id: button2
-                            text: qsTr("like")
+                            // text: qsTr("like")
                             anchors.right: button1.left
                             width: 36
                             height: 36
                             anchors.rightMargin: 4
                             onClicked: {
-                                music.change_("like",id)
-                                favorite_ = !favorite_
+                                music.change_music("like",id)
+                                model.favorite = !model.favorite
                             }
-                            background: Rectangle {
-                                implicitWidth: 32
-                                implicitHeight: 32
-                                // color: 'green'
-                                color: favorite_ ? "#c1ffb8" : "#8a0000"
+                            // background: Rectangle {
+                            //     implicitWidth: 32
+                            //     implicitHeight: 32
+                            //     // color: 'green'
+                            //     color: favorite_ ? "#c1ffb8" : "#8a0000"
+                            // }
+                            background: Image {
+                                id: image_1
+                                anchors.fill: parent
+                                source: favorite ? "like.png" : "unlike.png"
                             }
 
                             contentItem: Text {
@@ -483,6 +491,153 @@ ApplicationWindow {
                             }
                         }
                     }
+                }
+
+                Component {
+                    id: playlist_delegate
+                    ItemDelegate {    
+                        text: model.name + " - " + model.duration + " - " + model.num_music
+                        width: parent.width
+                        Button {
+                            id: button33
+                            text: qsTr("Play")
+                            anchors.right: parent.right
+                            width: 36
+                            height: 36
+                            anchors.rightMargin: 8
+
+                            background: Rectangle {
+                                implicitWidth: 32
+                                implicitHeight: 32
+                                color: "#e8e1e1"
+                            }
+                            onClicked: {
+                                music.set_now_playlists(id)
+                                // favorite_ = !favorite_
+                            }
+                        }
+                        Button {
+                            id: button34
+                            text: qsTr("change")
+                            anchors.right: button33.left
+                            width: 36
+                            height: 36
+                            anchors.rightMargin: 8
+
+                            background: Rectangle {
+                                implicitWidth: 32
+                                implicitHeight: 32
+                                color: "#e8e1e1"
+                            }
+                            onClicked: {
+                                // music.set_now_playlists(id)
+                                playlist_change.set_playlist(id)
+                                dialog2.open()
+                                // favorite_ = !favorite_
+                            }
+                        }
+                    }
+                }
+
+
+                Component {
+                    id: now_playing_delegate
+                    ItemDelegate {
+                        
+                        text: model.track + " - " + model.author + " - " + model.publish_year 
+                        width: parent.width
+                        Button {
+                            id: button
+                            text: qsTr("-")
+                            anchors.right: parent.right
+                            width: 36
+                            height: 36
+                            anchors.rightMargin: 8
+
+                            background: Rectangle {
+                                implicitWidth: 32
+                                implicitHeight: 32
+                                color: "#e8e1e1"
+                            }
+                            
+                            contentItem: Text {
+                                text: parent.text
+                                verticalAlignment: Text.AlignVCenter
+                                horizontalAlignment: Text.AlignHCenter
+                                font.family: "Segoe MDL2 Assets"
+                                font.pixelSize: 16
+                                color: "red"
+                                renderType: Text.NativeRendering
+                            }
+                        }
+                        Button {
+                            id: button1
+                            text: qsTr("+")
+                            anchors.right: button.left
+                            width: 36
+                            height: 36
+                            anchors.rightMargin: 4
+
+                            background: Rectangle {
+                                implicitWidth: 32
+                                implicitHeight: 32
+                                color: "#e8e1e1"
+                            }
+
+                            contentItem: Text {
+                                text: parent.text
+                                verticalAlignment: Text.AlignVCenter
+                                horizontalAlignment: Text.AlignHCenter
+                                font.family: "Segoe MDL2 Assets"
+                                font.pixelSize: 16
+                                color: "green"
+                                renderType: Text.NativeRendering
+                            }
+                        }
+                        Button {
+                            id: button2
+                            // text: qsTr("like")
+                            anchors.right: button1.left
+                            width: 36
+                            height: 36
+                            anchors.rightMargin: 4
+                            onClicked: {
+                                music.change_music("like",id)
+                                model.favorite = !model.favorite
+                            }
+                            // background: Rectangle {
+                            //     implicitWidth: 32
+                            //     implicitHeight: 32
+                            //     // color: 'green'
+                            //     color: favorite_ ? "#c1ffb8" : "#8a0000"
+                            // }
+                            background: Image {
+                                id: image_1
+                                anchors.fill: parent
+                                source: favorite ? "like.png" : "unlike.png"
+                            }
+
+                            contentItem: Text {
+                                text: parent.text
+                                verticalAlignment: Text.AlignVCenter
+                                horizontalAlignment: Text.AlignHCenter
+                                font.family: "Segoe MDL2 Assets"
+                                font.pixelSize: 16
+                                color: "black"
+                                renderType: Text.NativeRendering
+                            }
+                        }
+                    }
+                }
+
+
+
+                ListView {
+                    id: listView
+                    clip: true
+                    anchors.fill: parent
+                    model: music_model
+                    delegate: music_delegate
 
                     ScrollBar.vertical: ScrollBar {
                         parent: filesFrame
@@ -514,6 +669,13 @@ ApplicationWindow {
 
     Connections {
         target: music
+        onCloseDialog1: {
+            dialog1.accept()
+        }
+
+        onCloseDialog2: {
+            dialog2.accept()
+        }
 
         // Обработчик сигнала 
         onSeekSlider: {
@@ -524,88 +686,96 @@ ApplicationWindow {
             // longer_2 было задано через arguments=['longer_2']
             seekSlider.value  = longer_2
         }
+        //////////////////////////////////////////////////////
         onUpdListView_music: {
-            // music_model = music_model.append({author: 'author_',album: 'album_', track: 'track_'})
             listView.model = music_model
-            // playlist_model = playlist_model.clear()
+            listView.delegate = music_delegate
+            // delegate_loader.sourceComponent = music_delegate
         }
         onAddListView_music:{
-            music_model = music_model.append({id: id_, author: author_,publish_year: publish_year_, track: track_, favorite_: liked_})
-            // listView.model = music_model
-            console.log("onAddListView_music",author_,publish_year_,track_) 
+            music_model = music_model.append({id: id_, author: author_,publish_year: publish_year_, track: track_, favorite: liked_})
+            // console.log('onAddListView_music',liked_)
         }
-        onUpdListView_playlist: {
-            // playlist_model = playlist_model.append({author: "Playlist", album: " ", track: "num = " + (1 % 9 + 1), id: 16, favorite_: !(1 % 3)})
-            listView.model = playlist_model
-            // updateModel()
+        onDropListView_music: {
+            music_model = music_model.remove(id)
+        }
+        onClearListView_music: {
+            music_model = music_model.clear()
+        }
 
+
+        //////////////////////////////////////////////////////
+        onUpdListView_Now_playlist: {
+            listView.model = now_playing_model
+            listView.delegate = music_delegate
+        }
+        onAddListView_Now_playlist:{
+            now_playing_model = now_playing_model.append({id: id_, author: author_,publish_year: publish_year_, track: track_, favorite: liked_})
+        }
+        onDropListView_Now_playlist: {
+            now_playing_model = now_playing_model.remove(id)
+        }
+        onClearListView_Now_playlist: {
+            now_playing_model = now_playing_model.clear()
+        }
+
+
+        //////////////////////////////////////////////////////
+        onUpdListView_playlist: {
+            listView.model = playlist_model
+            listView.delegate = playlist_delegate
+            console.log('onUpdListView__playlist')
+        }
+        onAddListView_playlist:{
+            playlist_model = playlist_model.append({id: id_, name: name_, num_music: num_music_,duration: duration_})
+            console.log('onAddListView_playlist',id_,name_)
+        }
+        onDropListView_playlist: {
+            playlist_model = playlist_model.remove(id)
+        }
+        onClearListView_playlist: {
+            playlist_model = playlist_model.clear()
         }
     }
+
+
 
     Dialog {
         id: dialog1
-            // RowLayout {
-                // layoutDirection: RightToLeft 
-                // anchors.horizontalCenter: parent.horizontalCenter
-                Button {
-                    id: button_save
-                    // anchors.right: button_cancel.left
-                    text: qsTr("Save")
-                    onClicked: {
-                        // fileDialog_music.open()
-                        console.log("Save")                   
-                    }
-                }
-                Button {
-                    id: button_cancel
-                    // anchors.right: parent.right
-                    text: qsTr("Cancel")
-                    onClicked: {
-                        // fileDialog_music.open()
-                        console.log("Canceled") 
-                        music_add.get_all_playlists()                  
-                    }
-                }
-                // }
-                Connections {
-                    target: music_add
-                }
+        width: 1080 
+        height: 720 
+        title: 'Add Music'
+        contentItem: Loader {
+                id: loader_
+
+                anchors.centerIn: dialog1
+                source: "add_file.qml"
+            }
+
+        Connections {
+            target: music_add
+        }
+
+    }
+    Dialog {
+        id: dialog2
+        width: 1080 
+        height: 720 
+        title: 'Add Music'
+        contentItem: Loader {
+                id: loader_2
+
+                anchors.centerIn: dialog2
+                source: "change_playlist.qml"
+            }
+
+        Connections {
+            target: playlist_change
+        }
 
     }
 
-    Slider {
-        id: volume
-        x: 433
-        y: 407
-        width: 40
-        height: 252
-        focusPolicy: Qt.TabFocus
-        font.pointSize: 8
-        live: false
-        stepSize: 1
-        to: 100
-        orientation: Qt.Vertical
-        value: 50
-    }
-    
 
-
-
-
-//    Button {
-//        id: button
-//        x: 188
-//        y: 115
-//        text: qsTr("Button")
-//    }
-
-//    RoundButton {
-//        id: roundButton
-//        x: 266
-//        y: 144
-//        radius: 200
-//        text: "+"
-//    }
 }
 /*##^##
 Designer {

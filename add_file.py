@@ -24,23 +24,11 @@ class Music_Add(QObject):
     album = pyqtSignal(str, arguments=['text_'])
     artistname = pyqtSignal(str, arguments=['text_'])
 
-    
-
-    # seekSlider2 = pyqtSignal(int, arguments=['longer_2'])
-    # updListView_playlist = pyqtSignal(int, arguments=['len'])
-    # updListView_music = pyqtSignal(int, arguments=['len'])
-    # cигнал передающий сумму
-    # обязательно даём название аргументу через arguments=['sum']
-    # иначе нельзя будет его забрать в QML
-    # sumResult = pyqtSignal(int, arguments=['sum'])
- 
-    # subResult = pyqtSignal(int, arguments=['sub'])
  
     # слот для суммирования двух чисел
     @pyqtSlot(str)
     def get_file(self,x):
-        # складываем два аргумента и испускаем сигнал
-        # self.sumResult.emit(arg1 + arg2)
+
         self.musicpath_ = x.split('///')[1]
         tag = TinyTag.get(self.musicpath_)
         print('file path: ',self.musicpath_)
@@ -92,17 +80,35 @@ class Music_Add(QObject):
         elif '|Album|#' in x:
             self.album_ = x.split('|#')[1]
             print(self.album_)            
-        
-        # return self.music.
-        # self.updListView_music.emit(10)
+
 
     @pyqtSlot()
-    def get_all_playlists(self):
+    def save(self):
         """
         """
-        print('get_all_playlists')
-        # return self.playlists.id_playlist
-        # self.updListView_playlist.emit(40)
+        print('save')
+    
+    @pyqtSlot()
+    def clear(self):
+        """
+        """
+        print('clear')
+        self.musicpath_ = ''
+        self.pictureath_ = ''
+        self.genre_ = ''
+        self.title_ = ''
+        self.album_ = ''
+        self.artistname_ = ''
+        self.genre.emit(self.genre_)
+        self.title.emit(self.title_)
+        self.album.emit(self.album_)
+        self.artistname.emit(self.artistname_)
+        self.pictureath.emit(self.pictureath_)
+        self.musicpath.emit(self.musicpath_)
+
+
+    
+
     
 
 if  __name__ == "__main__":
