@@ -190,14 +190,21 @@ class Music(QObject):
         """
         """
         print('upd_music_list ' + 'add')
-        self.closeDialog1.emit()
+        # self.closeDialog1.emit()
+
+    @pyqtSlot()
+    def upd_playlist_list(self):
+        """
+        """
+        print('upd_playlist_list ' + 'add')
+        # self.closeDialog2.emit()
         
     @pyqtSlot()
     def close_music_dialog(self):
         self.closeDialog1.emit()
 
     @pyqtSlot()
-    def close__playlist_dialog(self):
+    def close_playlist_dialog(self):
         self.closeDialog2.emit()
 
 if  __name__ == "__main__":

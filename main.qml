@@ -532,6 +532,7 @@ ApplicationWindow {
                             onClicked: {
                                 // music.set_now_playlists(id)
                                 playlist_change.set_playlist(id)
+                                playlist_change.set()
                                 dialog2.open()
                                 // favorite_ = !favorite_
                             }

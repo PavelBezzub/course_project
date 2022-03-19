@@ -82,7 +82,7 @@ class playlist_change(QObject):
 
     @pyqtSlot()
     def clear(self):
-        self.pictureath_ = ''
+        self.pictureath_ = "test.jpg"
         self.name_ = ''
     
     @pyqtSlot()

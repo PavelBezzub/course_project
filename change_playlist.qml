@@ -322,7 +322,7 @@ Rectangle {
                         console.log("Save")
                         music.upd_playlist_list()
                         playlist_change.clear()
-                        music.close__playlist_dialog()                      
+                        music.close_playlist_dialog()                      
                     }
                 }
                 Button {
@@ -330,7 +330,9 @@ Rectangle {
                     // anchors.right: parent.right
                     text: qsTr("Cancel")
                     onClicked: {
-                        console.log("Canceled")                   
+                        console.log("Canceled")
+                        playlist_change.clear()
+                        music.close_playlist_dialog()                   
                     }
                 }
             }
