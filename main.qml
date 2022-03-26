@@ -307,15 +307,15 @@ ApplicationWindow {
                 {
                     if(pressed)
                     {
-                        console.log("pressed")
+                        // console.log("pressed")
                         // returnAnimation.stop()
                         music.pressed()
                     }
                     else
                     {
-                        console.log("released")
+                        // console.log("released")
                         // returnAnimation.start()
-                        music.released()
+                        music.released(value)
                     }
                 }
 
@@ -387,11 +387,8 @@ ApplicationWindow {
                     text: qsTr("Add PlayList")
                     onClicked: {
                         // fileDialog.open() 
-                        dialog2.open()
-
-                        // music.start_playlist_dialog() 
-                        playlist_change.set() 
-                        // test {text: qsTr('Albums')}            
+                        playlist_change.set_all() 
+                        dialog2.open()          
                     }
                 }
             }
@@ -605,11 +602,8 @@ ApplicationWindow {
                             //     color: "#e8e1e1"
                             // }
                             onClicked: {
-                                // music.set_now_playlists(id)
                                 playlist_change.set_playlist(id)
-                                // playlist_change.set()
                                 dialog2.open()
-                                // favorite_ = !favorite_
                             }
                         }
                     }

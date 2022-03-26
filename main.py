@@ -1,3 +1,4 @@
+from turtle import position
 from PyQt5.QtGui import QGuiApplication
 from PyQt5.QtQml import QQmlApplicationEngine
 from PyQt5.QtCore import QObject, pyqtSignal, pyqtSlot
@@ -35,7 +36,8 @@ class Progressbar:
             time.sleep(1)
         if self._running: 
 #             next_music()
-            self.func()
+            print('start_next')
+            self.func(True)
 
 
 class Music(QObject):
@@ -134,9 +136,10 @@ class Music(QObject):
         """
         df = get_song_in_playlist(Song, Playlist_Song, id_)
         # self.current_playlist = df.reset_index()
+        print(df)
         self.clearListView_Now_playlist.emit()
         for i, row in df.iterrows():
-            self.addListView_Now_playlist.emit(row.id, row.artist,str(row.publish_year),row.song_title, row.liked) 
+            self.addListView_Now_playlist.emit(row.track_id, row.artist,str(row.publish_year),row.song_title, row.liked) 
         return df.reset_index()
     
 
@@ -175,24 +178,22 @@ class Music(QObject):
         self.thread_.start()
         if self.next_music_id < self.music_count - 1:
             self.next_music_id = self.current_music_id + 1
-        # self.mixer_.load()
-        # self.seekSlider2.emit(10)
-        # self.test_()
 
     @pyqtSlot(int)
     def play_all_music(self,id_):
-        
+        """
+        """
         self.current_playlist = get_all_music(Song)
         self.music_count = (self.current_playlist.shape[0])
         self.current_music_id = id_
         if id_ > 0:
             self.previous_music_id = id_ - 1
         print('play all music', id_)
-        # self.set_songNameLabel.emit('play')
 
     @pyqtSlot(int)
     def play_music_in_playlist(self,id_):
-
+        """
+        """
         print('play_music_in_playlist', id_)
     
  
@@ -230,16 +231,22 @@ class Music(QObject):
         print('stop')
 
     @pyqtSlot()
-    def next_(self):
+    def next_(self, flag = False):
         """
         """
+        print('next _ ')
         self.pause_ = False
-        self.progress.terminate() 
-  
-        self.thread_.join()
+        if not flag:
+            self.progress.terminate() 
+    
+            self.thread_.join()
         mixer.music.stop()
-        if self.current_music_id < self.music_count - 1:
-            self.current_music_id += 1
+
+        if (self.next_music_id < self.music_count) and (self.next_music_id  != -1):
+            self.current_music_id = self.next_music_id
+            self.next_music_id += 1
+            if self.next_music_id == self.music_count:
+                self.next_music_id = -1
             self.play()
         else:
             print('the playlist is over')
@@ -251,11 +258,9 @@ class Music(QObject):
         """
         """
         self.progress.terminate() 
-  
         self.thread_.join()
         mixer.music.stop()
         if self.current_music_id == 0 :
-#             self.current_music_id += 1
             self.play()
         else:
             self.current_music_id -= 1
@@ -280,40 +285,38 @@ class Music(QObject):
         """
         """
         print('pressed')
+        self.progress.terminate() 
+  
+        self.thread_.join()
+        mixer.music.stop()
 
-    @pyqtSlot()
-    def released(self):
+    @pyqtSlot(int)
+    def released(self, position):
         """
         """
-        print('released')
+        print('released', position)
+        self.progress = Progressbar(self.test_f, self.next_,  position = position)
+        self.thread_ = threading.Thread(target = self.progress.run)
+        self.thread_.start()
 
     @pyqtSlot(int)
     def rewind_music(self, position):
         """
         """
-        self.progress.terminate() 
-  
-        self.thread_.join()
-        mixer.music.stop()
         print('rewind ', position)
         mixer.music.rewind()
 #         mixer.music.set_pos(float(t))
         mixer.music.play(start = position)
-        # self.progress = Progressbar(self.test_f, self.next_,  position = position)
-        # self.thread_ = threading.Thread(target = self.progress.run)
-        # self.thread_.start()
+
     
     @pyqtSlot()
     def favorite(self):
         """
         """
         print('favorite')
-        # self.setProperty_music_list.emit(1,'favorite',True)
-        # self.setProperty_now_music_list.emit(1,'favorite',True)
         info = self.current_playlist.loc[self.current_music_id]
-        id_ = info.id
+        id_ = info.song_id
         self.change_music('favorite like', id_, False)
-        # self.set_main_picture.emit('test_.jpg')
 
     @pyqtSlot(int)
     def set_volume(self, x):
@@ -329,24 +332,22 @@ class Music(QObject):
         """
         """
         print('change_ ' + a,id_, not flag)
-        print('current_playlist', self.current_playlist.columns())
         if a == 'like':
             if (self.current_playlist is not None):
-                if (id_ in self.current_playlist.id.to_list()):
-                    t = self.current_playlist.loc[self.current_playlist.id == id_].index.values[0]
+                if (id_ in self.current_playlist.song_id.to_list()):
+                    t = self.current_playlist.loc[self.current_playlist.song_id == id_].index.values[0]
                     self.setProperty_now_music_list.emit(t,'favorite',not flag)
             set_favorite(Song, id_)
 
         if a == 'like now playlist':
-            t = self.music.loc[self.music.song_id == id_].index.values[0]
-            print('t ', t)
-            self.setProperty_music_list.emit(t,'favorite',not flag)
+            print('id_ ', id_)
+            self.setProperty_music_list.emit(id_,'favorite',not flag)
             set_favorite(Song, id_)
 
         if a == 'favorite like':
             if (self.current_playlist is not None):
-                if (id_ in self.current_playlist.id.to_list()):
-                    t = self.current_playlist.loc[self.current_playlist.id == id_].index.values[0]
+                if (id_ in self.current_playlist.song_id.to_list()):
+                    t = self.current_playlist.loc[self.current_playlist.song_id == id_].index.values[0]
                     self.setProperty_now_music_list.emit(t,'favorite',not flag)
 
             t = self.music.loc[self.music.song_id == id_].index.values[0]
@@ -364,17 +365,21 @@ class Music(QObject):
         """
         self.music = get_all_music(Song)
         self.clearListView_music.emit()
-        for i, row in self.music.iterrows():
-            self.addListView_music.emit(row.song_id, row.artist,str(row.publish_year),row.song_title, row.liked)
+        if not self.music.empty:
+            for i, row in self.music.iterrows():
+                self.addListView_music.emit(row.song_id, row.artist,str(row.publish_year),row.song_title, row.liked)
         print('upd_music_list ' + 'add')
-        # self.closeDialog1.emit()
 
     @pyqtSlot()
     def upd_playlist_list(self):
         """
         """
+        self.playlists = get_all_playlist(Playlist)
+        self.clearListView_playlist.emit()
+        if not self.playlists.empty:
+            for i, row in self.playlists.iterrows():
+                self.addListView_playlist.emit(row.playlist_id, row.playlist_name, row.number_of_tracks, int(row.duration_playlist/60))
         print('upd_playlist_list ')
-        # self.closeDialog2.emit()
         
     @pyqtSlot()
     def close_music_dialog(self):
@@ -389,6 +394,13 @@ class Music(QObject):
         print('delete music ', id_)
         del_song_cascade(Song,Playlist_Song, id_)
         self.upd_music_list()
+
+    @pyqtSlot(int)
+    def del_playlist(self, id_):
+        print('delete music ', id_)
+        del_playlist_cascade(Playlist, Playlist_Song, id_)
+        self.upd_playlist_list()
+    
 
 if  __name__ == "__main__":
     import sys

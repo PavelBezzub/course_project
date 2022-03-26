@@ -320,6 +320,7 @@ Rectangle {
                     text: qsTr("Save")
                     onClicked: {
                         console.log("Save")
+                        playlist_change.save()
                         music.upd_playlist_list()
                         playlist_change.clear()
                         music.close_playlist_dialog()                      
