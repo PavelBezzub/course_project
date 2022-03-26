@@ -251,6 +251,21 @@ Rectangle{
                 }
             }
             Label {
+                id: label7
+                text: qsTr("Year")
+            }
+            RowLayout {
+                TextField {
+                    id: textfield_year
+                    Layout.fillWidth: true
+                    placeholderText: qsTr("Enter year")
+                    // editingFinished: {}
+                    onEditingFinished: {
+                        music_add.upd_info('|year|#' + textfield_year.text)
+                    }
+                }
+            }
+            Label {
                 id: label3
                 text: qsTr("Title")
             }
@@ -304,7 +319,8 @@ Rectangle{
                         // fileDialog_music.open()
                         console.log("Canceled")
                         // music_add.clear()
-                        music.close_music_dialogs()                
+                        music_add.clear()
+                        music.close_music_dialog()                
                     }
                 }
             }
@@ -352,10 +368,13 @@ Rectangle{
                 // textfield_genre.text = genre
                 // textfield_title.text = title
             }
-            onPictureath: {
+            onPicturepath: {
                 textfield_picture_path.text = text_
+            }
+            onPicture: {
                 image_1.source = text_
             }
+
             onGenre: {
                 textfield_genre.text = text_
             }
@@ -367,6 +386,9 @@ Rectangle{
             }
             onAlbum: {
                 textfield_album.text = text_
+            }
+            onYear: {
+                textfield_year.text = text_
             }
         }
     }

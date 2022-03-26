@@ -126,8 +126,10 @@ ApplicationWindow {
                 Layout.fillHeight: true
 
                 Image {
-                    fillMode: Image.PreserveAspectCrop
-                    source: "images/album-cover.jpg"
+                    id: main_img
+                    // fillMode: Image.PreserveAspectCrop
+                    anchors.fill: parent
+                    source: "test.jpg"
                 }
             }
 
@@ -247,11 +249,11 @@ ApplicationWindow {
                     radius: 200
                     onClicked: music.favorite()
                 }
-                RoundButton {
-                    text: "stop"
-                    radius: 200
-                    onClicked: music.stop()
-                }
+                // RoundButton {
+                //     text: "stop"
+                //     radius: 200
+                //     onClicked: music.stop()
+                // }
                 RoundButton {
                     text: "previous"
                     radius: 200
@@ -265,7 +267,7 @@ ApplicationWindow {
                 RoundButton {
                     text: "next"
                     radius: 200
-                    onClicked: music.next() 
+                    onClicked: music.next_() 
                 }
                 RoundButton {
                     text: "repeat"
@@ -283,9 +285,9 @@ ApplicationWindow {
                 id: seekSlider
                 value: 0
                 to: 261
-
+                snapMode: SnapOnRelease
                 Layout.fillWidth: true
-
+                onMoved: music.rewind_music(value)
                 ToolTip {
                     parent: seekSlider.handle
                     visible: seekSlider.pressed
@@ -300,6 +302,23 @@ ApplicationWindow {
                         return number;
                     }
                 }
+
+                onPressedChanged:
+                {
+                    if(pressed)
+                    {
+                        console.log("pressed")
+                        // returnAnimation.stop()
+                        music.pressed()
+                    }
+                    else
+                    {
+                        console.log("released")
+                        // returnAnimation.start()
+                        music.released()
+                    }
+                }
+
             }
         }
         ColumnLayout {
@@ -315,11 +334,12 @@ ApplicationWindow {
                 Layout.alignment: Qt.AlignLeft | Qt.AlignBottom
                 focusPolicy: Qt.TabFocus
                 font.pointSize: 8
-                live: false
+                live: true
                 stepSize: 1
                 to: 100
                 orientation: Qt.Vertical
                 value: 50
+                onMoved: music.set_volume(value)
             }
         }
 
@@ -411,18 +431,28 @@ ApplicationWindow {
                         width: parent.width
                         Button {
                             id: button
-                            text: qsTr("-")
+                            // text: qsTr("-")
                             anchors.right: parent.right
                             width: 36
                             height: 36
                             anchors.rightMargin: 8
 
-                            background: Rectangle {
-                                implicitWidth: 32
-                                implicitHeight: 32
-                                color: "#e8e1e1"
+                            // background: Rectangle {
+                            //     implicitWidth: 32
+                            //     implicitHeight: 32
+                            //     color: "#e8e1e1"
+                            // }
+
+                            onClicked: {
+                                music.del_music(id)
+                                // model.favorite = !model.favorite
                             }
-                            
+                            background: Image {
+                                id: image_10
+                                // anchors.fill: parent
+                                source: "trash.png"
+                            }
+
                             contentItem: Text {
                                 text: parent.text
                                 verticalAlignment: Text.AlignVCenter
@@ -435,16 +465,26 @@ ApplicationWindow {
                         }
                         Button {
                             id: button1
-                            text: qsTr("+")
+                            // text: qsTr("+")
                             anchors.right: button.left
                             width: 36
                             height: 36
                             anchors.rightMargin: 4
 
-                            background: Rectangle {
-                                implicitWidth: 32
-                                implicitHeight: 32
-                                color: "#e8e1e1"
+                            // background: Rectangle {
+                            //     implicitWidth: 32
+                            //     implicitHeight: 32
+                            //     color: "#e8e1e1"
+                            // }
+                            background: Image {
+                                id: image_8
+                                // anchors.fill: parent
+                                source: "play.png"
+                            }
+                            onClicked: {
+                                music.play_all_music(id)
+                                music.play()
+                                // model.favorite = !model.favorite
                             }
 
                             contentItem: Text {
@@ -465,7 +505,7 @@ ApplicationWindow {
                             height: 36
                             anchors.rightMargin: 4
                             onClicked: {
-                                music.change_music("like",id)
+                                music.change_music("like",id,model.favorite)
                                 model.favorite = !model.favorite
                             }
                             // background: Rectangle {
@@ -498,41 +538,76 @@ ApplicationWindow {
                     ItemDelegate {    
                         text: model.name + " - " + model.duration + " - " + model.num_music
                         width: parent.width
+
                         Button {
-                            id: button33
-                            text: qsTr("Play")
+                            id: button23
+                            // text: qsTr("Play")
                             anchors.right: parent.right
                             width: 36
                             height: 36
                             anchors.rightMargin: 8
 
-                            background: Rectangle {
-                                implicitWidth: 32
-                                implicitHeight: 32
-                                color: "#e8e1e1"
+                            // background: Rectangle {
+                            //     implicitWidth: 32
+                            //     implicitHeight: 32
+                            //     color: "#e8e1e1"
+                            // }
+                            background: Image {
+                                id: image_playlist_trash
+                                // anchors.fill: parent
+                                source: "trash.png"
+                            }
+                            onClicked: {
+                                console.log('del playlist', id)
+                            }
+                        }
+
+
+                        Button {
+                            id: button33
+                            // text: qsTr("Play")
+                            anchors.right: button23.left
+                            width: 36
+                            height: 36
+                            anchors.rightMargin: 8
+
+                            // background: Rectangle {
+                            //     implicitWidth: 32
+                            //     implicitHeight: 32
+                            //     color: "#e8e1e1"
+                            // }
+                            background: Image {
+                                id: image_playlist_play_
+                                // anchors.fill: parent
+                                source: "play.png"
                             }
                             onClicked: {
                                 music.set_now_playlists(id)
-                                // favorite_ = !favorite_
+                                music.play()
                             }
                         }
                         Button {
                             id: button34
-                            text: qsTr("change")
+                            // text: qsTr("change")
                             anchors.right: button33.left
                             width: 36
                             height: 36
                             anchors.rightMargin: 8
 
-                            background: Rectangle {
-                                implicitWidth: 32
-                                implicitHeight: 32
-                                color: "#e8e1e1"
+                            background: Image {
+                                id: image_change_playlist
+                                // anchors.fill: parent
+                                source: "edit.png"
                             }
+                            // background: Rectangle {
+                            //     implicitWidth: 32
+                            //     implicitHeight: 32
+                            //     color: "#e8e1e1"
+                            // }
                             onClicked: {
                                 // music.set_now_playlists(id)
                                 playlist_change.set_playlist(id)
-                                playlist_change.set()
+                                // playlist_change.set()
                                 dialog2.open()
                                 // favorite_ = !favorite_
                             }
@@ -548,41 +623,21 @@ ApplicationWindow {
                         text: model.track + " - " + model.author + " - " + model.publish_year 
                         width: parent.width
                         Button {
-                            id: button
-                            text: qsTr("-")
-                            anchors.right: parent.right
-                            width: 36
-                            height: 36
-                            anchors.rightMargin: 8
-
-                            background: Rectangle {
-                                implicitWidth: 32
-                                implicitHeight: 32
-                                color: "#e8e1e1"
-                            }
-                            
-                            contentItem: Text {
-                                text: parent.text
-                                verticalAlignment: Text.AlignVCenter
-                                horizontalAlignment: Text.AlignHCenter
-                                font.family: "Segoe MDL2 Assets"
-                                font.pixelSize: 16
-                                color: "red"
-                                renderType: Text.NativeRendering
-                            }
-                        }
-                        Button {
                             id: button1
-                            text: qsTr("+")
-                            anchors.right: button.left
+                            // text: qsTr("+")
+                            anchors.right: parent.right
                             width: 36
                             height: 36
                             anchors.rightMargin: 4
 
-                            background: Rectangle {
-                                implicitWidth: 32
-                                implicitHeight: 32
-                                color: "#e8e1e1"
+                            background: Image {
+                                id: image_98
+                                // anchors.fill: parent
+                                source: "play.png"
+                            }
+
+                            onClicked: {
+                                music.play_music_in_playlist(id)
                             }
 
                             contentItem: Text {
@@ -603,7 +658,7 @@ ApplicationWindow {
                             height: 36
                             anchors.rightMargin: 4
                             onClicked: {
-                                music.change_music("like",id)
+                                music.change_music("like now playlist",id,model.favorite)
                                 model.favorite = !model.favorite
                             }
                             // background: Rectangle {
@@ -686,6 +741,7 @@ ApplicationWindow {
         onSeekSlider2: {
             // longer_2 было задано через arguments=['longer_2']
             seekSlider.value  = longer_2
+            // console.log('value ',longer_2)
         }
         //////////////////////////////////////////////////////
         onUpdListView_music: {
@@ -708,7 +764,8 @@ ApplicationWindow {
         //////////////////////////////////////////////////////
         onUpdListView_Now_playlist: {
             listView.model = now_playing_model
-            listView.delegate = music_delegate
+            // listView.delegate = music_delegate
+            listView.delegate = now_playing_delegate
         }
         onAddListView_Now_playlist:{
             now_playing_model = now_playing_model.append({id: id_, author: author_,publish_year: publish_year_, track: track_, favorite: liked_})
@@ -736,6 +793,21 @@ ApplicationWindow {
         }
         onClearListView_playlist: {
             playlist_model = playlist_model.clear()
+        }
+        ////////////////////////////////////////////////////////
+        onSetProperty_music_list: {
+            music_model.setProperty(id_, property_, liked_)
+        }
+
+        onSetProperty_now_music_list: {
+            now_playing_model.setProperty(id_, property_, liked_)
+        }
+        ////////////////////////////////////////////////////////
+        onSet_songNameLabel: {
+            songNameLabel.text = text_
+        }
+        onSet_main_picture: {
+            main_img.source = path_
         }
     }
 

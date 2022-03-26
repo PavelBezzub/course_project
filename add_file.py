@@ -4,26 +4,30 @@ from PyQt5.QtCore import QObject, pyqtSignal, pyqtSlot
 from matplotlib.artist import Artist
 import pandas as pd
 from tinytag import TinyTag
+from music_db_ import *
 
 
 class Music_Add(QObject):
     def __init__(self):
         QObject.__init__(self)
         self.musicpath_ = ''
-        self.pictureath_ = ''
+        self.picturepath_ = ''
         self.genre_ = ''
         self.title_ = ''
         self.album_ = ''
         self.artistname_ = ''
+        self.year_ = ''
 
     
     musicpath = pyqtSignal(str, arguments=['text_'])
-    pictureath = pyqtSignal(str, arguments=['text_'])
+    picturepath = pyqtSignal(str, arguments=['text_'])
     genre = pyqtSignal(str, arguments=['text_'])
     title = pyqtSignal(str, arguments=['text_'])
     album = pyqtSignal(str, arguments=['text_'])
     artistname = pyqtSignal(str, arguments=['text_'])
+    year = pyqtSignal(str, arguments=['text_'])
 
+    picture = pyqtSignal(str, arguments=['text_'])
  
     # слот для суммирования двух чисел
     @pyqtSlot(str)
@@ -34,12 +38,13 @@ class Music_Add(QObject):
         print('file path: ',self.musicpath_)
 
         self.musicpath.emit(self.musicpath_)
-
+        # добавить год!!!!!!!!!!!!
         self.genre_ = tag.genre 
         self.title_ = tag.title
         self.album_ = tag.album
         self.artistname_ = tag.artist
         self.duration_ = tag.duration
+        self.year_ = tag.year
 
         self.genre.emit(self.genre_)
         self.title.emit(self.title_)
@@ -50,9 +55,10 @@ class Music_Add(QObject):
     
     @pyqtSlot(str)
     def get_picture(self,x):
-        self.pictureath_ = x
-        print('file path: ',self.pictureath_)
-        self.pictureath.emit(self.pictureath_)
+        self.picturepath_ = x
+        print('file path: ',self.picturepath_)
+        self.picturepath.emit(self.picturepath_)
+        self.picture.emit(self.picturepath_)
 
     @pyqtSlot(str)
     def upd_info(self, x):
@@ -63,17 +69,17 @@ class Music_Add(QObject):
             self.musicpath_ = x.split('|#')[1]
             print(self.musicpath_)
         elif '|picture_path|#' in x:
-            self.pictureath_ = x.split('|#')[1]
-            print(self.pictureath_)
+            self.picturepath_ = x.split('|#')[1]
+            print(self.picturepath_)
         elif '|artist_name|#' in x:
             self.artistname_ = x.split('|#')[1]
             print(self.artistname_)
         elif '|genre|#' in x:
             self.genre_ = x.split('|#')[1]
             print(self.genre_)
-        elif '|genre|#' in x:
-            self.genre_ = x.split('|#')[1]
-            print(self.genre_)
+        elif '|year|#' in x:
+            self.year_ = x.split('|#')[1]
+            print(self.year_)
         elif '|title|#' in x:
             self.title_ = x.split('|#')[1]
             print(self.title_)
@@ -86,6 +92,7 @@ class Music_Add(QObject):
     def save(self):
         """
         """
+        add_new_song(Song,self.musicpath_,self.picturepath_,self.genre_,self.title_,self.album_,self.artistname_,self.duration_,self.year_)
         print('save')
     
     @pyqtSlot()
@@ -94,17 +101,20 @@ class Music_Add(QObject):
         """
         print('clear')
         self.musicpath_ = ''
-        self.pictureath_ = ''
+        self.picturepath_ = ''
         self.genre_ = ''
         self.title_ = ''
         self.album_ = ''
         self.artistname_ = ''
+        self.year_ = ''
         self.genre.emit(self.genre_)
         self.title.emit(self.title_)
         self.album.emit(self.album_)
         self.artistname.emit(self.artistname_)
-        self.pictureath.emit(self.pictureath_)
+        self.picturepath.emit(self.picturepath_)
         self.musicpath.emit(self.musicpath_)
+        self.year.emit(self.year_)
+        self.picture.emit("test.jpg")
 
 
     

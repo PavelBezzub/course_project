@@ -359,10 +359,12 @@ Rectangle {
         Connections {
             target: playlist_change
 
-            onPictureath: {
+            onPicturepath: {
                 textfield_picture_path.text = text_
-                image_1.source = text_
             }
+            onPicture : {
+                image_1.source = text_
+            } 
             onName: {
                 textfield_name.text = text_
             }

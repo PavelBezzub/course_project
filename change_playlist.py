@@ -5,17 +5,18 @@ from matplotlib.artist import Artist
 import pandas as pd
 from tinytag import TinyTag
 
-music = pd.read_csv('course_project/music.csv')
+music = pd.read_csv('music.csv')
 
 class playlist_change(QObject):
     def __init__(self):
         QObject.__init__(self)
-        self.pictureath_ = ''
+        self.picturepath_ = ''
         self.name_ = ''
         self.music_ = music
         self.quantity_ = self.music_.shape[0]
 
-    pictureath = pyqtSignal(str, arguments=['text_'])
+    picturepath = pyqtSignal(str, arguments=['text_'])
+    picture = pyqtSignal(str, arguments=['text_'])
     name = pyqtSignal(str, arguments=['text_'])
 
     
@@ -28,35 +29,13 @@ class playlist_change(QObject):
         if not self.music_.empty:
             for i, row in self.music_.iterrows():
                 self.addListView_music.emit(row.id, row.artist,str(row.publish_year),row.song_title, row.liked, False)
-
-    # @pyqtSlot(str)
-    # def get_file(self,x):
-    #     # складываем два аргумента и испускаем сигнал
-    #     # self.sumResult.emit(arg1 + arg2)
-    #     self.musicpath_ = x.split('///')[1]
-    #     tag = TinyTag.get(self.musicpath_)
-    #     print('file path: ',self.musicpath_)
-
-    #     self.musicpath.emit(self.musicpath_)
-
-    #     self.genre_ = tag.genre 
-    #     self.title_ = tag.title
-    #     self.album_ = tag.album
-    #     self.artistname_ = tag.artist
-    #     self.duration_ = tag.duration
-
-    #     self.genre.emit(self.genre_)
-    #     self.title.emit(self.title_)
-    #     self.album.emit(self.album_)
-    #     self.artistname.emit(self.artistname_)
-    #     print('music duration: ', self.duration_)
-
     
     @pyqtSlot(str)
     def get_picture(self,x):
-        self.pictureath_ = x
-        print('file path: ',self.pictureath_)
-        self.pictureath.emit(self.pictureath_)
+        self.picturepath_ = x
+        print('file path: ',self.picturepath_)
+        self.picturepath.emit(self.picturepath_)
+        self.picture.emit(self.picturepath_)
 
     @pyqtSlot(str)
     def upd_info(self, x):
@@ -64,8 +43,9 @@ class playlist_change(QObject):
         """
         print('x: ', x)
         if '|picture_path|#' in x:
-            self.pictureath_ = x.split('|#')[1]
-            print(self.pictureath_)
+            self.picturepath_ = x.split('|#')[1]
+            print(self.picturepath_)
+            self.picture.emit(self.picturepath_)
         elif '|name|#' in x:
             self.name_ = x.split('|#')[1]
             print(self.name_)   
@@ -82,13 +62,19 @@ class playlist_change(QObject):
 
     @pyqtSlot()
     def clear(self):
-        self.pictureath_ = "test.jpg"
+        self.picturepath_ = ""
         self.name_ = ''
+        self.clearListView_music.emit()
+        self.picturepath.emit('')
+        self.name.emit('')
+        self.picture.emit('test.jpg')
     
     @pyqtSlot()
     def save(self):
         """
         """
+        # music.upd_playlist_list()
+        # music.close_playlist_dialog()  
         print('save')
 
     @pyqtSlot()
@@ -96,12 +82,16 @@ class playlist_change(QObject):
         """
         """
         self.set_data_()
-        print('save')
+        print('set')
     
     @pyqtSlot(int)
     def set_playlist(self, id_):
         print('upd_p ', id_)
-        self.name.emit(str(id_))
+        name = 'id_ ' + str(id_)
+        self.picturepath_ = name
+        self.picturepath_ = '...'
+        self.picturepath.emit(self.picturepath_)
+        self.picture.emit(self.picturepath_)
 
 
 if  __name__ == "__main__":
