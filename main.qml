@@ -216,7 +216,7 @@ ApplicationWindow {
 
                 Label {
                     id: songNameLabel
-                    text: "Edvard Grieg - In the Hall of the Mountain King"
+                    text: "choose music, please"
                     font.pixelSize: Qt.application.font.pixelSize * 1.4
                 }
 
@@ -245,40 +245,78 @@ ApplicationWindow {
                 Layout.alignment: Qt.AlignHCenter
 
                 RoundButton {
-                    text: "favorite"
-                    radius: 200
+                    // text: "favorite"
+                    radius: 100
+
+                    background: Image {
+                                id: image_favorite
+                                anchors.fill: parent
+                                source: "unlike.png"
+                            }
+
                     onClicked: music.favorite()
                 }
-                // RoundButton {
-                //     text: "stop"
-                //     radius: 200
-                //     onClicked: music.stop()
-                // }
                 RoundButton {
-                    text: "previous"
-                    radius: 200
+                    // text: "stop"
+                    radius: 100
+                    background: Image {
+                                id: image_stop
+                                anchors.fill: parent
+                                source: "stop.png"
+                            }
+
+                    onClicked: {
+                        music.stop()
+                        music.clear_now_playlist() 
+                        }
+                }
+                RoundButton {
+                    // text: "previous"
+                    radius: 100
+
+                    background: Image {
+                                id: image_prev
+                                anchors.fill: parent
+                                source: "prev.png"
+                            }
                     onClicked: music.previous()
                 }
                 RoundButton {
-                    text: "pause"
-                    radius: 200
+                    // text: "pause"
+                    radius: 100
+                    background: Image {
+                                id: image_pause
+                                anchors.fill: parent
+                                source: "pause.png"
+                            }
                     onClicked: music.pause()
                 }
                 RoundButton {
-                    text: "next"
-                    radius: 200
+                    // text: "next"
+                    radius: 100
+
+                    background: Image {
+                                id: image_next
+                                anchors.fill: parent
+                                source: "next.png"
+                            }
                     onClicked: music.next_() 
                 }
                 RoundButton {
-                    text: "repeat"
-                    radius: 200
+                    // text: "repeat"
+                    radius: 100
+                    background: Image {
+                                id: image_repeat
+                                anchors.fill: parent
+                                source: "repeat.png"
+                            }
                     onClicked: music.repeat() 
                 }
-                RoundButton {
-                    text:"shuffle"
-                    radius: 200
-                    onClicked: music.shuffle() 
-                }
+                // RoundButton {
+                //     text:"shuffle"
+                //     radius: 200
+                //     onClicked: music.shuffle() 
+                // }
             }
 
             Slider {
@@ -424,8 +462,18 @@ ApplicationWindow {
                     id: music_delegate
                     ItemDelegate {
                         
-                        text: model.track + " - " + model.author + " - " + model.publish_year 
+                        // text: model.track + " - " + model.author + " - " + model.publish_year 
                         width: parent.width
+                        Text {
+                            anchors.left: parent.left
+                            anchors.right: button2.left
+                            text: model.track + " - " + model.author + " - " + model.publish_year 
+                            font.family: "Helvetica"
+                            font.pointSize: 10
+                            color: "black"
+                            wrapMode: Text.WordWrap
+                            anchors.verticalCenter: parent.verticalCenter 
+                        }
                         Button {
                             id: button
                             // text: qsTr("-")
@@ -446,7 +494,7 @@ ApplicationWindow {
                             }
                             background: Image {
                                 id: image_10
-                                // anchors.fill: parent
+                                anchors.fill: parent
                                 source: "trash.png"
                             }
 
@@ -475,7 +523,7 @@ ApplicationWindow {
                             // }
                             background: Image {
                                 id: image_8
-                                // anchors.fill: parent
+                                anchors.fill: parent
                                 source: "play.png"
                             }
                             onClicked: {
@@ -533,9 +581,18 @@ ApplicationWindow {
                 Component {
                     id: playlist_delegate
                     ItemDelegate {    
-                        text: model.name + " - " + model.duration + " - " + model.num_music
+                        // text: model.name + " - " + model.duration + " - " + model.num_music
                         width: parent.width
-
+                        Text {
+                            anchors.left: parent.left
+                            anchors.right: button34.left
+                            text: model.name + " - " + model.duration + " - " + model.num_music
+                            font.family: "Helvetica"
+                            font.pointSize: 10
+                            color: "black"
+                            wrapMode: Text.WordWrap
+                            anchors.verticalCenter: parent.verticalCenter 
+                        }
                         Button {
                             id: button23
                             // text: qsTr("Play")
@@ -551,11 +608,12 @@ ApplicationWindow {
                             // }
                             background: Image {
                                 id: image_playlist_trash
-                                // anchors.fill: parent
+                                anchors.fill: parent
                                 source: "trash.png"
                             }
                             onClicked: {
                                 console.log('del playlist', id)
+                                music.del_playlist(id)
                             }
                         }
 
@@ -575,7 +633,7 @@ ApplicationWindow {
                             // }
                             background: Image {
                                 id: image_playlist_play_
-                                // anchors.fill: parent
+                                anchors.fill: parent
                                 source: "play.png"
                             }
                             onClicked: {
@@ -593,7 +651,7 @@ ApplicationWindow {
 
                             background: Image {
                                 id: image_change_playlist
-                                // anchors.fill: parent
+                                anchors.fill: parent
                                 source: "edit.png"
                             }
                             // background: Rectangle {
@@ -614,7 +672,17 @@ ApplicationWindow {
                     id: now_playing_delegate
                     ItemDelegate {
                         
-                        text: model.track + " - " + model.author + " - " + model.publish_year 
+                        // text: model.track + " - " + model.author + " - " + model.publish_year 
+                        Text {
+                            anchors.left: parent.left
+                            anchors.right: button2.left
+                            text: model.track + " - " + model.author + " - " + model.publish_year 
+                            font.family: "Helvetica"
+                            font.pointSize: 10
+                            color: "black"
+                            wrapMode: Text.WordWrap
+                            anchors.verticalCenter: parent.verticalCenter 
+                        }
                         width: parent.width
                         Button {
                             id: button1

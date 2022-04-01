@@ -34,6 +34,8 @@ class Progressbar:
 #             i += 1
             self.signal(self.position + mixer.music.get_pos()/ 1000)
             time.sleep(1)
+
+        # time.sleep(1)
         if self._running: 
 #             next_music()
             print('start_next')
@@ -57,9 +59,10 @@ class Music(QObject):
         # self.path_py = os.path.abspath(os.curdir) + '\\'
         # self.current_music = '' 
         # self.current_playlist = None  
-        # self.now_playlist = None
+        # self.now_playlist = Non
 
         ################################################ для плэйлиста
+        self.something_playing = False
         self.pause_ = False
         self.current_playlist = None 
         self.volume = 0.5
@@ -105,7 +108,7 @@ class Music(QObject):
         
         if not self.playlists.empty:
             for i, row in self.playlists.iterrows():
-                self.addListView_playlist.emit(row.playlist_id, row.playlist_name, row.number_of_tracks, int(row.duration_playlist/60))
+                self.addListView_playlist.emit(row.playlist_id, row.playlist_name, row.number_of_tracks, int(row.duration_playlist))
         
 
     @pyqtSlot()
@@ -149,6 +152,9 @@ class Music(QObject):
         """
         """
         print('set_now_playlists', id_)
+
+        if self.something_playing:
+            self.stop()
         
         self.current_playlist = self.get_music_in_playlist(id_)
         self.music_count = (self.current_playlist.shape[0])
@@ -162,12 +168,15 @@ class Music(QObject):
     def play(self):
         """
         """
+        self.something_playing = True
+
         print('play')
         info = self.current_playlist.loc[self.current_music_id]
         print(info)
         self.set_songNameLabel.emit(info.song_title)
         self.set_main_picture.emit(info.path_img)
         print('duration ', info.duration)
+        print('self.volume ', self.volume)
         self.seekSlider.emit(info.duration)
         self.seekSlider2.emit(0) # сигнал на слайдер
         mixer.music.load(info.path_in_pc)
@@ -183,6 +192,9 @@ class Music(QObject):
     def play_all_music(self,id_):
         """
         """
+        if self.something_playing:
+            self.stop()
+
         self.current_playlist = get_all_music(Song)
         self.music_count = (self.current_playlist.shape[0])
         self.current_music_id = id_
@@ -194,6 +206,27 @@ class Music(QObject):
     def play_music_in_playlist(self,id_):
         """
         """
+        # self.progress.terminate() 
+  
+        # # Wait for actual termination (if needed) 
+        # self.thread_.join() 
+        # mixer.music.stop()
+        # self.pause_ = False
+        if self.something_playing:
+            self.stop()
+
+        
+        self.current_music_id = self.current_playlist.loc[self.current_playlist.song_id == id_].index.values[0]
+
+        print('play_music_ ', id_)
+        # if (id_ < self.music_count - 1):
+        #     self.next_music_id = id_ + 1
+        # else:
+        #     self.next_music_id = id_ 
+            
+
+        music.play()
+        
         print('play_music_in_playlist', id_)
     
  
@@ -228,7 +261,15 @@ class Music(QObject):
         self.thread_.join() 
         mixer.music.stop()
 
+        self.pause_ = False
+
         print('stop')
+
+    @pyqtSlot()
+    def clear_now_playlist(self):
+        self.set_songNameLabel.emit("choose music, please")
+        self.set_main_picture.emit("test.jpg")
+        self.clearListView_Now_playlist.emit()
 
     @pyqtSlot()
     def next_(self, flag = False):
@@ -323,8 +364,8 @@ class Music(QObject):
         """
         """
         print('set_volume ', x)
-        self.volume = x
-        mixer.music.set_volume(float(self.volume/100))
+        self.volume = x/100
+        mixer.music.set_volume(float(self.volume))
     
 
     @pyqtSlot(str,int, bool)
@@ -397,7 +438,7 @@ class Music(QObject):
 
     @pyqtSlot(int)
     def del_playlist(self, id_):
-        print('delete music ', id_)
+        print('del_playlist ', id_)
         del_playlist_cascade(Playlist, Playlist_Song, id_)
         self.upd_playlist_list()
     

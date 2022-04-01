@@ -165,6 +165,7 @@ def get_playlist_info(Playlist, id_):
     return row 
 
 def change_playlist_(Playlist, Playlist_Song, id_, picturepath_, playlist_name, list_checked_id, duration):
+    print('Change')
     data = get_song_in_playlist(Song, Playlist_Song, id_)
     alias_ = Playlist.alias()
     row = alias_.select().where(alias_.id == id_).get()
@@ -174,10 +175,17 @@ def change_playlist_(Playlist, Playlist_Song, id_, picturepath_, playlist_name, 
     row.path_pl_img = picturepath_
     row.created_date = pd.to_datetime(datetime.datetime.now())
 
-    alias_2 = Playlist_Song.alias()
-    row2 = alias_2.select().where(alias_2.playlist_id == id_).get()
-    row2.delete_instance()
 
+    alias_2 = Playlist_Song.alias()
+    l = pd.DataFrame( data = (alias_2.select().where(alias_2.playlist_id == id_).dicts().execute())).track_id.to_list()
+    for i in l:
+        row2 = alias_2.select().where((alias_2.playlist_id == id_) and alias_2.track_id == i).get()
+        row2.delete_instance()
+    # alias_2 = Playlist_Song.alias()
+    # row2 = alias_2.select().where(alias_2.playlist_id == id_).get()
+    # print(row2)
+    # row2.delete_instance()
+    print(list_checked_id)
     for i in list_checked_id:
         Playlist_Song.insert(track_id = i, playlist_id = id_).execute()
 

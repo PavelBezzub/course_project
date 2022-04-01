@@ -9,8 +9,6 @@ from tinytag import TinyTag
 from music_db_ import *
 
 
-# music = pd.read_csv('music.csv')
-
 class playlist_change(QObject):
     def __init__(self):
         QObject.__init__(self)
@@ -56,18 +54,16 @@ class playlist_change(QObject):
             print(self.name_)   
 
     @pyqtSlot(str,int,bool)
-    def change_music(self, a,b,c):
+    def change_music(self, a,b,flag):
         """
         """
-        self.music_.loc[self.music_.song_id == b, 'add_'] = c
-        # print(a)
-        print('change_ ' + a,b,c)
-        # self.seekSlider.emit(100)        
-        # return self.music.
-        # self.updListView_music.emit(10)
+        self.music_.loc[self.music_.song_id == b, 'add_'] = flag
+        print('change_ ' + a,b,flag)
 
     @pyqtSlot()
     def clear(self):
+        """
+        """
         self.picturepath_ = ""
         self.name_ = ''
         self.clearListView_music.emit()
@@ -88,7 +84,7 @@ class playlist_change(QObject):
         else:
             list_checked_id = self.music_.loc[self.music_['add_']].song_id.to_list()
             duration = self.music_.loc[self.music_.add_].duration.sum()
-            add_playlist(Playlist, Playlist_Song,self.picturepath_, self.playlist_name, list_checked_id, duration)
+            add_playlist(Playlist, Playlist_Song,self.picturepath_, self.name_, list_checked_id, duration)
         # music.upd_playlist_list()
         # music.close_playlist_dialog()  
         print('save')
