@@ -36,7 +36,7 @@ class playlist_change(QObject):
     @pyqtSlot(str)
     def get_picture(self,x):
         self.picturepath_ = x
-        print('file path: ',self.picturepath_)
+        # print('file path: ',self.picturepath_)
         self.picturepath.emit(self.picturepath_)
         self.picture.emit(self.picturepath_)
 
@@ -47,18 +47,18 @@ class playlist_change(QObject):
         print('x: ', x)
         if '|picture_path|#' in x:
             self.picturepath_ = x.split('|#')[1]
-            print(self.picturepath_)
+            # print(self.picturepath_)
             self.picture.emit(self.picturepath_)
         elif '|name|#' in x:
             self.name_ = x.split('|#')[1]
-            print(self.name_)   
+            # print(self.name_)   
 
     @pyqtSlot(str,int,bool)
     def change_music(self, a,b,flag):
         """
         """
         self.music_.loc[self.music_.song_id == b, 'add_'] = flag
-        print('change_ ' + a,b,flag)
+        # print('change_ ' + a,b,flag)
 
     @pyqtSlot()
     def clear(self):
@@ -80,14 +80,14 @@ class playlist_change(QObject):
             list_checked_id = self.music_.loc[self.music_['add_']].song_id.to_list()
             duration = self.music_.loc[self.music_.add_].duration.sum()
             change_playlist_(Playlist, Playlist_Song, self.id_, self.picturepath_, self.name_, list_checked_id, duration)
-            print('c')
+            # print('c')
         else:
             list_checked_id = self.music_.loc[self.music_['add_']].song_id.to_list()
             duration = self.music_.loc[self.music_.add_].duration.sum()
             add_playlist(Playlist, Playlist_Song,self.picturepath_, self.name_, list_checked_id, duration)
         # music.upd_playlist_list()
         # music.close_playlist_dialog()  
-        print('save')
+        # print('save')
 
     @pyqtSlot()
     def set_all(self):
@@ -98,7 +98,7 @@ class playlist_change(QObject):
         self.music_ = data
         self.quantity_ = self.music_.shape[0]
         self.set_data_()
-        print('set')
+        # print('set')
     
     @pyqtSlot(int)
     def set_playlist(self, id_):
@@ -114,9 +114,9 @@ class playlist_change(QObject):
         self.quantity_ = self.music_.shape[0]
 
         self.change_ = True
-        print('upd_p ', id_)
+        # print('upd_p ', id_)
         info = get_playlist_info(Playlist, id_)
-        print(info)
+        # print(info)
         self.name_ = info['playlist_name']
         self.picturepath_ = info['path_pl_img']
         self.name.emit(self.name_)

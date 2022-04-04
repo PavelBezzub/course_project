@@ -35,7 +35,7 @@ class Music_Add(QObject):
 
         self.musicpath_ = x.split('///')[1]
         tag = TinyTag.get(self.musicpath_)
-        print('file path: ',self.musicpath_)
+        # print('file path: ',self.musicpath_)
 
         self.musicpath.emit(self.musicpath_)
 
@@ -50,13 +50,13 @@ class Music_Add(QObject):
         self.title.emit(self.title_)
         self.album.emit(self.album_)
         self.artistname.emit(self.artistname_)
-        print('music duration: ', self.duration_)
+        # print('music duration: ', self.duration_)
 
     
     @pyqtSlot(str)
     def get_picture(self,x):
         self.picturepath_ = x
-        print('file path: ',self.picturepath_)
+        # print('file path: ',self.picturepath_)
         self.picturepath.emit(self.picturepath_)
         self.picture.emit(self.picturepath_)
 
@@ -64,28 +64,28 @@ class Music_Add(QObject):
     def upd_info(self, x):
         """
         """
-        print('x: ', x)
+        # print('x: ', x)
         if '|music_path|#' in x:
             self.musicpath_ = x.split('|#')[1]
-            print(self.musicpath_)
+            # print(self.musicpath_)
         elif '|picture_path|#' in x:
             self.picturepath_ = x.split('|#')[1]
-            print(self.picturepath_)
+            # print(self.picturepath_)
         elif '|artist_name|#' in x:
             self.artistname_ = x.split('|#')[1]
-            print(self.artistname_)
+            # print(self.artistname_)
         elif '|genre|#' in x:
             self.genre_ = x.split('|#')[1]
-            print(self.genre_)
+            # print(self.genre_)
         elif '|year|#' in x:
             self.year_ = x.split('|#')[1]
-            print(self.year_)
+            # print(self.year_)
         elif '|title|#' in x:
             self.title_ = x.split('|#')[1]
-            print(self.title_)
+            # print(self.title_)
         elif '|Album|#' in x:
             self.album_ = x.split('|#')[1]
-            print(self.album_)            
+            # print(self.album_)            
 
 
     @pyqtSlot()
@@ -93,13 +93,13 @@ class Music_Add(QObject):
         """
         """
         add_new_song(Song,self.musicpath_,self.picturepath_,self.genre_,self.title_,self.album_,self.artistname_,self.duration_,self.year_)
-        print('save')
+        # print('save')
     
     @pyqtSlot()
     def clear(self):
         """
         """
-        print('clear')
+        # print('clear')
         self.musicpath_ = ''
         self.picturepath_ = ''
         self.genre_ = ''
