@@ -29,7 +29,7 @@ class Music_Add(QObject):
 
     picture = pyqtSignal(str, arguments=['text_'])
  
-    # слот для суммирования двух чисел
+
     @pyqtSlot(str)
     def get_file(self,x):
 
@@ -38,7 +38,7 @@ class Music_Add(QObject):
         print('file path: ',self.musicpath_)
 
         self.musicpath.emit(self.musicpath_)
-        # добавить год!!!!!!!!!!!!
+
         self.genre_ = tag.genre 
         self.title_ = tag.title
         self.album_ = tag.album

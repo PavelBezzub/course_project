@@ -9,14 +9,6 @@ Rectangle {
     width: 1080
     height: 720
     visible: true
-    // title: "Qt Quick Controls 2 - Imagine Style Example: Music Player"
-
-    // Component.onCompleted: {
-    //     x = Screen.width / 2 - width / 2
-    //     y = Screen.height / 2 - height / 2
-    // }
-      
-
 
     ColumnLayout {
         id: columnLayout_1
@@ -51,18 +43,15 @@ Rectangle {
                     id: droparea_picture;
                     anchors.fill: parent
                     onEntered: {
-                        console.log("onEntered")
-                        // root.color = "gray";
-                        // drag.accept (Qt.LinkAction);
+                        // console.log("onEntered")
                     }
                     onDropped: {
-                        console.log("onEntered")
-                        console.log(drop.urls)
+                        // console.log("onEntered")
+                        // console.log(drop.urls)
                         playlist_changed.get_picture(drop.urls) 
-                        // root.color = "white"
                     }
                     onExited: {
-                        console.log('Canceled')
+                        // console.log('Canceled')
                     }
                 }
                 Layout.fillWidth: true
@@ -71,7 +60,6 @@ Rectangle {
                 Image {
                     id: image_1
                     anchors.fill: parent
-                    // fillMode: Image.PreserveAspectCrop
                     source: "test.jpg"
                 }
             }
@@ -84,60 +72,22 @@ Rectangle {
             height: 517
             spacing: 16
             
-            // RowLayout {
-
-            //     DropArea {
-            //         id: dropArea_music;
-            //         anchors.fill: parent
-            //         onEntered: {
-            //             console.log("onEntered")
-            //             // root.color = "gray";
-            //             // drag.accept (Qt.LinkAction);
-            //         }
-            //         onDropped: {
-            //             console.log("onEntered")
-            //             console.log(drop.urls)
-            //             music_add.get_file(drop.urls)
-            //             // root.color = "white"
-            //         }
-            //         onExited: {
-            //             console.log('Canceled')
-            //         }
-            //     }
-
-            //     TextField {
-            //         id: textfield_music_path
-            //         Layout.fillWidth: true
-            //         placeholderText: qsTr("Enter music path")
-            //         onEditingFinished: {
-            //             music_add.upd_info('|music_path|#' + textfield_music_path.text)
-            //         }
-            //     }
-            //     Button {
-            //         text: qsTr("music")
-            //         onClicked: {
-            //             fileDialog_music.open()                   
-            //         }
-            //     }
-            // }
             RowLayout {
                 
                 DropArea {
                     id: dropArea_picture_1;
                     anchors.fill: parent
                     onEntered: {
-                        console.log("onEntered")
-                        // root.color = "gray";
-                        // drag.accept (Qt.LinkAction);
+                        // console.log("onEntered")
+
                     }
                     onDropped: {
-                        console.log("onEntered")
-                        console.log(drop.urls)
+                        // console.log("onEntered")
+                        // console.log(drop.urls)
                         playlist_change.get_picture(drop.urls)
-                        // root.color = "white"
                     }
                     onExited: {
-                        console.log('Canceled')
+                        // console.log('Canceled')
                     }
                 }
                 
@@ -148,7 +98,7 @@ Rectangle {
                     onEditingFinished: {
                         playlist_change.upd_info('|picture_path|#' + textfield_picture_path.text)
                     }
-                    // editingFinished: {}
+
                 }
                 Button {
                     text: qsTr("picture")
@@ -183,44 +133,15 @@ Rectangle {
                         
                         text: model.track + " - " + model.author + " - " + model.publish_year 
                         width: parent.width
-                        // Button {
-                        //     id: button
-                        //     text: qsTr("-")
-                        //     anchors.right: parent.right
-                        //     width: 36
-                        //     height: 36
-                        //     anchors.rightMargin: 8
 
-                        //     background: Rectangle {
-                        //         implicitWidth: 32
-                        //         implicitHeight: 32
-                        //         color: "#e8e1e1"
-                        //     }
-                            
-                        //     contentItem: Text {
-                        //         text: parent.text
-                        //         verticalAlignment: Text.AlignVCenter
-                        //         horizontalAlignment: Text.AlignHCenter
-                        //         font.family: "Segoe MDL2 Assets"
-                        //         font.pixelSize: 16
-                        //         color: "red"
-                        //         renderType: Text.NativeRendering
-                        //     }
-                        // }
                         Button {
                             id: button1
                             // text: qsTr("+")
-                            // anchors.right: button.left
                             anchors.right: parent.right
                             width: 36
                             height: 36
                             anchors.rightMargin: 4
-                            // vat property add : false
-                            // background: Rectangle {
-                            //     implicitWidth: 32
-                            //     implicitHeight: 32
-                            //     color: "#e8e1e1"
-                            // }
+
                             onClicked: {                                
                                 model.add = !model.add
                                 playlist_change.change_music("add_",id,add)
@@ -247,16 +168,6 @@ Rectangle {
                             width: 36
                             height: 36
                             anchors.rightMargin: 4
-                            // onClicked: {
-                            //     playlist_change.change_music("like",id)
-                            //     model.favorite = !model.favorite
-                            // }
-                            // background: Rectangle {
-                            //     implicitWidth: 32
-                            //     implicitHeight: 32
-                            //     // color: 'green'
-                            //     color: favorite_ ? "#c1ffb8" : "#8a0000"
-                            // }
                             background: Image {
                                 id: image_1
                                 anchors.fill: parent
@@ -308,7 +219,6 @@ Rectangle {
                     onEditingFinished: {
                         playlist_change.upd_info('|name|#' + textfield_name.text)
                     }
-                    // editingFinished: {}
                 }
             }
             RowLayout {
@@ -319,7 +229,7 @@ Rectangle {
                     // anchors.right: button_cancel.left
                     text: qsTr("Save")
                     onClicked: {
-                        console.log("Save")
+                        // console.log("Save")
                         playlist_change.save()
                         music.upd_playlist_list()
                         playlist_change.clear()
@@ -331,7 +241,7 @@ Rectangle {
                     // anchors.right: parent.right
                     text: qsTr("Cancel")
                     onClicked: {
-                        console.log("Canceled")
+                        // console.log("Canceled")
                         playlist_change.clear()
                         music.close_playlist_dialog()                   
                     }
@@ -350,11 +260,11 @@ Rectangle {
             id: fileDialog_picture
             title: "Please choose a picture"
             onAccepted: {
-                console.log("You chose: " + fileDialog_picture.fileUrls)
+                // console.log("You chose: " + fileDialog_picture.fileUrls)
                 playlist_change.get_picture(fileDialog_picture.fileUrls)   
             }
             onRejected: {
-                console.log("Canceled")
+                // console.log("Canceled")
             }
         }
         Connections {

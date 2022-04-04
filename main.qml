@@ -11,7 +11,7 @@ ApplicationWindow {
     width: 1000
     height: 720
     visible: true
-    title: "Qt Quick Controls 2 - Imagine Style Example: Music Player"
+    title: "Music Player"
 
     Component.onCompleted: {
         x = Screen.width / 2 - width / 2
@@ -58,54 +58,6 @@ ApplicationWindow {
         onActivated: Qt.quit()
     }
     
-//    header: ToolBar {
-//        RowLayout {
-//            id: headerRowLayout
-//            anchors.fill: parent
-//            spacing: 0
-
-//            ToolButton {
-//                icon.name: "grid"
-//            }
-//            ToolButton {
-//                icon.name: "settings"
-//            }
-//            ToolButton {
-//                icon.name: "filter"
-//            }
-//            ToolButton {
-//                icon.name: "message"
-//            }
-//            ToolButton {
-//                icon.name: "music"
-//            }
-//            ToolButton {
-//                icon.name: "cloud"
-//            }
-//            ToolButton {
-//                icon.name: "bluetooth"
-//            }
-//            ToolButton {
-//                icon.name: "cart"
-//            }
-
-//            Item {
-//                Layout.fillWidth: true
-//            }
-
-//            ToolButton {
-//                icon.name: "power"
-//                onClicked: Qt.quit()
-//            }
-//        }
-//    }
-
-    // Label {
-    //     text: "Qtify"
-    //     font.pixelSize: Qt.application.font.pixelSize * 1.3
-    //     anchors.centerIn: header
-    //     z: header.z + 1
-    // }
 
     RowLayout {
         spacing: 115
@@ -127,7 +79,6 @@ ApplicationWindow {
 
                 Image {
                     id: main_img
-                    // fillMode: Image.PreserveAspectCrop
                     anchors.fill: parent
                     source: "test.jpg"
                 }
@@ -415,16 +366,12 @@ ApplicationWindow {
                 Button {
                     text: qsTr("Add Music")
                     onClicked: {
-                        // fileDialog.open() 
-                        dialog1.open()
-                        // music.start_file_dialog()  
-                        // test {text: qsTr('Albums')}            
+                        dialog1.open()        
                     }
                 }
                 Button {
                     text: qsTr("Add PlayList")
                     onClicked: {
-                        // fileDialog.open() 
                         playlist_change.set_all() 
                         dialog2.open()          
                     }
@@ -482,15 +429,8 @@ ApplicationWindow {
                             height: 36
                             anchors.rightMargin: 8
 
-                            // background: Rectangle {
-                            //     implicitWidth: 32
-                            //     implicitHeight: 32
-                            //     color: "#e8e1e1"
-                            // }
-
                             onClicked: {
                                 music.del_music(id)
-                                // model.favorite = !model.favorite
                             }
                             background: Image {
                                 id: image_10
@@ -498,15 +438,15 @@ ApplicationWindow {
                                 source: "trash.png"
                             }
 
-                            contentItem: Text {
-                                text: parent.text
-                                verticalAlignment: Text.AlignVCenter
-                                horizontalAlignment: Text.AlignHCenter
-                                font.family: "Segoe MDL2 Assets"
-                                font.pixelSize: 16
-                                color: "red"
-                                renderType: Text.NativeRendering
-                            }
+                            // contentItem: Text {
+                            //     text: parent.text
+                            //     verticalAlignment: Text.AlignVCenter
+                            //     horizontalAlignment: Text.AlignHCenter
+                            //     font.family: "Segoe MDL2 Assets"
+                            //     font.pixelSize: 16
+                            //     color: "red"
+                            //     renderType: Text.NativeRendering
+                            // }
                         }
                         Button {
                             id: button1
@@ -516,11 +456,6 @@ ApplicationWindow {
                             height: 36
                             anchors.rightMargin: 4
 
-                            // background: Rectangle {
-                            //     implicitWidth: 32
-                            //     implicitHeight: 32
-                            //     color: "#e8e1e1"
-                            // }
                             background: Image {
                                 id: image_8
                                 anchors.fill: parent
@@ -529,7 +464,6 @@ ApplicationWindow {
                             onClicked: {
                                 music.play_all_music(id)
                                 music.play()
-                                // model.favorite = !model.favorite
                             }
 
                             contentItem: Text {
@@ -553,12 +487,7 @@ ApplicationWindow {
                                 music.change_music("like",id,model.favorite)
                                 model.favorite = !model.favorite
                             }
-                            // background: Rectangle {
-                            //     implicitWidth: 32
-                            //     implicitHeight: 32
-                            //     // color: 'green'
-                            //     color: favorite_ ? "#c1ffb8" : "#8a0000"
-                            // }
+
                             background: Image {
                                 id: image_1
                                 anchors.fill: parent
@@ -581,7 +510,6 @@ ApplicationWindow {
                 Component {
                     id: playlist_delegate
                     ItemDelegate {    
-                        // text: model.name + " - " + model.duration + " - " + model.num_music
                         width: parent.width
                         Text {
                             anchors.left: parent.left
@@ -601,11 +529,6 @@ ApplicationWindow {
                             height: 36
                             anchors.rightMargin: 8
 
-                            // background: Rectangle {
-                            //     implicitWidth: 32
-                            //     implicitHeight: 32
-                            //     color: "#e8e1e1"
-                            // }
                             background: Image {
                                 id: image_playlist_trash
                                 anchors.fill: parent
@@ -626,11 +549,6 @@ ApplicationWindow {
                             height: 36
                             anchors.rightMargin: 8
 
-                            // background: Rectangle {
-                            //     implicitWidth: 32
-                            //     implicitHeight: 32
-                            //     color: "#e8e1e1"
-                            // }
                             background: Image {
                                 id: image_playlist_play_
                                 anchors.fill: parent
@@ -654,11 +572,7 @@ ApplicationWindow {
                                 anchors.fill: parent
                                 source: "edit.png"
                             }
-                            // background: Rectangle {
-                            //     implicitWidth: 32
-                            //     implicitHeight: 32
-                            //     color: "#e8e1e1"
-                            // }
+
                             onClicked: {
                                 playlist_change.set_playlist(id)
                                 dialog2.open()
@@ -671,8 +585,6 @@ ApplicationWindow {
                 Component {
                     id: now_playing_delegate
                     ItemDelegate {
-                        
-                        // text: model.track + " - " + model.author + " - " + model.publish_year 
                         Text {
                             anchors.left: parent.left
                             anchors.right: button2.left
@@ -694,7 +606,6 @@ ApplicationWindow {
 
                             background: Image {
                                 id: image_98
-                                // anchors.fill: parent
                                 source: "play.png"
                             }
 
@@ -723,12 +634,7 @@ ApplicationWindow {
                                 music.change_music("like now playlist",id,model.favorite)
                                 model.favorite = !model.favorite
                             }
-                            // background: Rectangle {
-                            //     implicitWidth: 32
-                            //     implicitHeight: 32
-                            //     // color: 'green'
-                            //     color: favorite_ ? "#c1ffb8" : "#8a0000"
-                            // }
+
                             background: Image {
                                 id: image_1
                                 anchors.fill: parent
@@ -783,7 +689,6 @@ ApplicationWindow {
             console.log("Canceled")
         }
     }
-    // Component.onCompleted: visible = true
 
     Connections {
         target: music
@@ -826,7 +731,6 @@ ApplicationWindow {
         //////////////////////////////////////////////////////
         onUpdListView_Now_playlist: {
             listView.model = now_playing_model
-            // listView.delegate = music_delegate
             listView.delegate = now_playing_delegate
         }
         onAddListView_Now_playlist:{
@@ -844,11 +748,11 @@ ApplicationWindow {
         onUpdListView_playlist: {
             listView.model = playlist_model
             listView.delegate = playlist_delegate
-            console.log('onUpdListView__playlist')
+            // console.log('onUpdListView__playlist')
         }
         onAddListView_playlist:{
             playlist_model = playlist_model.append({id: id_, name: name_, num_music: num_music_,duration: duration_})
-            console.log('onAddListView_playlist',id_,name_)
+            // console.log('onAddListView_playlist',id_,name_)
         }
         onDropListView_playlist: {
             playlist_model = playlist_model.remove(id)

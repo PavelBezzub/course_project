@@ -123,12 +123,6 @@ class playlist_change(QObject):
         self.picturepath.emit(self.picturepath_)
         self.picture.emit(self.picturepath_)
 
-#         {'playlist_id': 2,
-#  'playlist_name': 'Rock',
-#  'number_of_tracks': 8,
-#  'duration_playlist': 2035.636043,
-#  'created_date': datetime.date(2022, 3, 17),
-#  'path_pl_img': 'playlist_images/pl2.jpg'}
 
 if  __name__ == "__main__":
     import sys
