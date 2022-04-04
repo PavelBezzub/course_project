@@ -13,7 +13,10 @@ ApplicationWindow {
     visible: true
     title: "Music Player"
 
-    onClosing: music.stop()
+    onClosing: { 
+        console.log("onClosing")
+        music.close_event()
+    }
 
     Component.onCompleted: {
         x = Screen.width / 2 - width / 2

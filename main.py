@@ -441,7 +441,11 @@ class Music(QObject):
         # print('del_playlist ', id_)
         del_playlist_cascade(Playlist, Playlist_Song, id_)
         self.upd_playlist_list()
-    
+
+    @pyqtSlot()
+    def close_event(self):
+        if self.something_playing:
+            self.stop()
 
 if  __name__ == "__main__":
     import sys
