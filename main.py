@@ -156,6 +156,10 @@ class Music(QObject):
         if self.something_playing:
             self.stop()
         
+        self.current_music_id = 0
+        self.next_music_id = 1
+        self.previous_music_id = 0
+
         self.current_playlist = self.get_music_in_playlist(id_)
         self.music_count = (self.current_playlist.shape[0])
         # print(self.current_playlist)
